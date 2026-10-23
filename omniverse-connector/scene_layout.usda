@@ -1,0 +1,31 @@
+#usda 1.0
+(
+customLayerData = {
+string creator = "Odynex Axis Logistics LLC - ManTAGU Engine"
+string compliance = "WTO-Digital-Trade / TUTSA-Secured"
+}
+defaultPrim = "World"
+metersPerUnit = 1.0
+upAxis = "Z"
+) 
+
+def Xform "World"
+{
+def Scope "ManTAGU_Sensors"
+{
+def Prim "FootwearSensors" (
+doc = "Dynamic haptic data anchor point for Physical AI foundation world models."
+)
+{
+custom string tracking_node_id = "ManTAGU-Vector-01"
+custom float physics:surface_friction = 0.75
+custom int physics:material_compliance = 2500
+}
+} 
+
+def Cube "SimulatedTerrainFloor"
+{
+float3 xformOp:scale = (10, 10, 0.1)
+uniform token[] xformOpOrder = ["xformOp:scale"]
+}
+}
