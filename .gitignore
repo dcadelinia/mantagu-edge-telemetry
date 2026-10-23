@@ -1,6 +1,31 @@
-*.i
-*.ii
-*.gpu
-*.ptx
-*.cubin
-*.fatbin
+### Build and IDE environments
+
+build/
+bin/
+obj/
+.vscode/
+.idea/ 
+
+### Python Virtual Environments
+
+venv/
+.venv/
+**pycache**/
+*.pyc
+*.pyo
+*.pyd 
+
+### CUDA/NVCC compiler outputs & profile logs
+
+*.nvprof
+*.qdrep
+*.sys
+*.log
+nvdta/ 
+
+### Sensitive or hardware specific dumps
+
+firmware/.pio/
+firmware/.clang_complete
+.env
+config_private.json
