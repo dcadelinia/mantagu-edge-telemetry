@@ -1,0 +1,22 @@
+{
+"project_identity": {
+"system_name": "ManTAGU Edge Telemetry Network",
+"parent_organization": "Odynex Axis Logistics LLC",
+"program_affiliation": "NVIDIA Inception Program"
+},
+"legal_and_compliance": {
+"trade_secret_governance": "Texas Uniform Trade Secrets Act (TUTSA)",
+"international_trade_framework": "WTO Electronic Commerce Agreement 2026",
+"tariff_classification_code": "8542.31.00 (Electronic Integrated Circuits as Sensors)",
+"encryption_level": "AES-256-GCM-Edge"
+},
+"deployment_routing": {
+"default_edge_node": "ManTAGU-Vector-01",
+"primary_simulation_layer": "omniverse-connector/scene_layout.usda",
+"target_platform_integrations": [
+"NVIDIA Omniverse Kit Extensions",
+"NVIDIA Isaac GR00T Humanoid Learning Pip",
+"Nebius Physical AI Workbench"
+]
+}
+}
