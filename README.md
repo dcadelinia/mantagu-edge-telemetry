@@ -1,72 +1,60 @@
-# mantagu-edge-telemetry-
-Edge sensor data pipeline and spatial telemetry firmware for the ManTAGU Smart Footwear System, built under the NVIDIA Inception Program for Physical AI ground-truthing.
-### ManTAGU Edge Telemetry System
+# ManTAGU Edge Telemetry
 
-The **ManTAGU Edge Telemetry System** is a proprietary spatial intelligence and physical data pipeline developed by **Odynex Axis Logistics LLC**. As part of the **NVIDIA Inception Program**, this project engineers the edge firmware, data ingestion pipelines, and simulation connectors that transform specialized footwear into real-time haptic sensors for Physical AI applications. 
+Edge sensor data pipeline and spatial telemetry firmware for the **ManTAGU Smart Footwear System**, built under the **NVIDIA Inception Program** for Physical AI ground-truthing.
 
-By mapping microscopic surface friction, material compliance, and subterranean indoor spatial topographies via human kinetic motion, ManTAGU bridges the "Sim-to-Real" gap—providing ground-truthing training datasets directly compatible with **NVIDIA Omniverse** and foundation world models. 
+Developed by **Odynex Axis Logistics LLC**.
 
-### 🚀 Core Architecture
+Maps surface friction, material compliance, and indoor spatial paths from human kinetic motion to bridge **Sim-to-Real** for Omniverse and foundation world models.
 
-1. **Firmware (/firmware)**: C++/C drivers optimized for ultra-low-power microcontrollers (ESP32/BLE) embedded directly into shoe soles. Manages real-time data streaming from high-frequency IMUs and tactile piezoelectric matrix sensors.
-2. **Data Pipeline (/data-pipeline)**: Python-based ingestion engines designed to process raw spatial packets, perform noise filtering, and run indoor dead-reckoning positioning algorithms.
-3. **Omniverse Connector (/omniverse-connector)**: Extension modules that convert parsed kinematic telemetry into open-standard **OpenUSD (Universal Scene Description)** layers for immediate injection into AI digital twin environments.
+---
 
-### 🛠️ Getting Started
+## Core architecture
 
-### Prerequisites
+1. **Firmware** (`firmware/`) — C++ sketch for ESP32/BLE soles: IMU + piezoelectric matrix → `MANTAGU_DATA:` serial stream  
+2. **Data pipeline** (`src/mantagu`, `data_pipeline/`) — parse packets, dead-reckon, friction/yield fusion  
+3. **Omniverse connector** — OpenUSD layout + Kit extension stub  
 
-* CUDA Toolkit 12.x or higher (for accelerated sensor fusion processing)
-* Python 3.10+
-* CMake (for building firmware modules)
+---
 
-### Clone the Repository
+## What was fixed
 
-bash
+| Issue | Fix |
+|-------|-----|
+| Python / C++ / extension sources **not valid** (indentation stripped) | Fully rewritten modules |
+| Malformed paths (`requirements.txt)`, `(.github/...`) | Clean tree |
+| Warp-only fusion would crash without GPU package | NumPy fallback |
+| Broken README clone URL / truncated install | Correct docs + working entrypoints |
 
-git clone https://github.com/dcadelinia/mantagu-edge-telemetry.git
+---
+
+## Quick start
+
+```bash
 cd mantagu-edge-telemetry
+pip install -r requirements.txt
 
-Use code with caution.
+PYTHONPATH=src python -m mantagu.cli --frames 5
+PYTHONPATH=src python data_pipeline/ingestion.py
+PYTHONPATH=src python data_pipeline/sim_warp.py
+PYTHONPATH=src pytest -q
+```
 
-### Installation
+---
 
-Deploy the pipeline environment dependencies locally using our setup utility: 
+## Layout
 
-bash
+```
+src/mantagu/          packets, dead_reckoning, fusion, pipeline, cli
+data_pipeline/        compatibility ingestion.py + sim_warp.py
+firmware/src/main.cpp
+omniverse_connector/scene_layout.usda
+exts/omni.mantagu.telemetry/...
+config.json  config/mantagu.yaml
+```
 
-pip install -r data-pipeline/requirements.txt
+---
 
-Use code with caution.
+## IP
 
-### 📦 Supported Hardware Form Factors
-
-* **ManTAGU Vector:** Lightweight, flexible sensor arrays built for high-resolution indoor positional mapping.
-* **ManTAGU Kinetic:** High-durability composite arrays built for industrial material science telemetry and anti-fatigue workforce analytics.
-* **ManTAGU Node:** Consolidated edge modules optimized for wide-area geographic terrain mapping.
-
-### 🛡️ Patent Strategy & Defensive Prior Art Publication
-
-### Defensive Publication Notice
-
-This repository, its public commits, documentation, and architectural designs serve as an official **Defensive Publication** under global patent frameworks, including the **America Invents Act (AIA) (35 U.S.C. § 102)**. 
-
-The systems described herein—specifically the methodology of integrating a modular haptic/kinetic sensor profile during the footwear manufacturing process to record micro-topographical surface physics (friction, material yield, compliance) to train foundation models and physical robotics architectures—are publicly disclosed as of the cryptographic commit timestamps of this repository. This public disclosure establishes irreversible **Prior Art**, legally preventing third parties from securing patent monopolies over these precise integrated systems, interfaces, and algorithmic data pipeline methodologies. 
-
-### Patent Pending & Proprietary Implementation Notice
-
-Certain specific operational parameters, proprietary hardware micro-topographies, and localized data models derived from this system are the subject of active or anticipated patent filings by Odynex Axis Logistics LLC. Unauthorized derivation, reverse engineering, or reproduction of the physical architecture outlined in this documentation for commercial manufacturing purposes is strictly prohibited and protected under international IP statutes. 
-
-### ⚖️ Governance & Global Trade Compliance
-
-### Intellectual Property Protection (TUTSA)
-
-The core haptic processing algorithms, code architectures, firmware structures, and data schemas contained within this repository represent proprietary trade secrets of Odynex Axis Logistics LLC. In accordance with the **Texas Uniform Trade Secrets Act (TUTSA) (Tex. Civ. Prac. & Rem. Code Ch. 134A)**, rigorous technical measures—including restricted edge key management and localized firmware encryption—must be maintained to preserve trade secret protections across third-party manufacturing facilities and contractors. 
-
-### International Data Governance & Digital Trade (WTO)
-
-Data payloads generated by ManTAGU footwear variants are architected to comply with the **World Trade Organization (WTO) Agreement on Electronic Commerce** baseline framework for cross-border digital trade. All telemetry transmission protocols strictly map onto global regulatory interoperability frameworks, keeping telemetry streaming friction-free, tariff-exempt, and legally compliant with modern international digital border trade infrastructures. 
-
-### 📜 License
-
-This project is licensed under the terms of the **Mozilla Public License 2.0**. See the LICENSE file for full compliance details.
+Proprietary spatial intelligence pipeline of Odynex Axis Logistics LLC.  
+Governed under TUTSA as noted in `config.json`. See [LICENSE](LICENSE).
