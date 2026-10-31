@@ -159,13 +159,3 @@ fly deploy --config deploy/fly.toml
 ```
 
 Then open the assigned `*.fly.dev` URL → `/docs`.
-
----
-
-## Live payments (Stripe → your bank)
-
-See **[BILLING.md](BILLING.md)** for the full checklist.
-
-Recommended: Stripe Checkout + bank payout. Enter routing `091017138` and account `692101680084` **only** in the Stripe Dashboard (Settings → Payouts). Never put them in code or git.
-
-API endpoints: `GET /v1/billing/tiers`, `POST /v1/billing/checkout`, `POST /v1/billing/portal`, `POST /v1/billing/webhook`.

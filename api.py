@@ -6,7 +6,7 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any, Dict, List, Optional
 
-from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -135,59 +135,10 @@ def fusion_batch(body: FusionBody, _: None = Depends(require_api_key)) -> Dict[s
     return run_gpu_sensor_fusion_batch(batch_size=body.batch_size, seed=body.seed)
 
 
-# --- Billing (Stripe) — bank payouts configured only in Stripe Dashboard ---
-@app.get("/v1/billing/tiers")
-def billing_tiers() -> Dict[str, Any]:
-    from mantagu.billing import list_tiers
-
-    return {"tiers": list_tiers()}
-
-
-@app.post("/v1/billing/checkout")
-def billing_checkout(body: Dict[str, Any]) -> Dict[str, Any]:
-    """Start a paid subscription. Returns Stripe Checkout URL."""
-    from mantagu.billing import CheckoutRequest, create_checkout_session
-
-    try:
-        req = CheckoutRequest.model_validate(body)
-        return create_checkout_session(req)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e)) from e
-    except RuntimeError as e:
-        raise HTTPException(status_code=503, detail=str(e)) from e
-
-
-@app.post("/v1/billing/portal")
-def billing_portal(body: Dict[str, Any]) -> Dict[str, Any]:
-    """Customer portal: update card, cancel, invoices."""
-    from mantagu.billing import PortalRequest, create_customer_portal
-
-    try:
-        req = PortalRequest.model_validate(body)
-        return create_customer_portal(req)
-    except RuntimeError as e:
-        raise HTTPException(status_code=503, detail=str(e)) from e
-
-
-@app.post("/v1/billing/webhook")
-async def billing_webhook(request: Request) -> Dict[str, str]:
-    """Stripe webhooks — Dashboard → https://YOUR_HOST/v1/billing/webhook"""
-    from mantagu.billing import construct_webhook_event, handle_webhook_event
-
-    payload = await request.body()
-    sig = request.headers.get("stripe-signature", "")
-    try:
-        event = construct_webhook_event(payload, sig)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Webhook error: {e}") from e
-    return handle_webhook_event(event)
-
-
 @app.get("/")
 def root() -> Dict[str, str]:
     return {
         "service": "ManTAGU Edge Telemetry",
         "docs": "/docs",
         "health": "/health",
-        "billing_tiers": "/v1/billing/tiers",
     }
