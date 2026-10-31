@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for mantagu-edge-telemetry on 2026-10-31T15:30:45Z
+# fly.toml app configuration file generated for mantagu-edge-telemetry on 2026-10-31T15:35:06Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'mantagu-edge-telemetry'
-primary_region = 'ams'
+primary_region = 'iad'
 
 [build]
 
