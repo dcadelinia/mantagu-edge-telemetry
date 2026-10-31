@@ -1,45 +1,42 @@
-"""
-Omniverse Kit extension stub for ManTAGU shoe telemetry.
-Requires omni.ext / omni.ui at runtime inside Omniverse Kit.
-This file is syntactically valid pure Python for offline import checks.
-"""
-from __future__ import annotations
-
-from typing import Any, Optional
+"""Omniverse Kit extension stub for ManTAGU telemetry dashboard."""
+import omni.ext
+import omni.ui as ui
 
 
-class ManTAGUTelemetryExtension:
-    """Lightweight stand-in; real Kit binds omni.ext.IExt."""
-
-    def __init__(self) -> None:
-        self._window: Optional[Any] = None
-
-    def on_startup(self, ext_id: str = "") -> None:
+class ManTAGUTelemetryExtension(omni.ext.IExt):
+    def on_startup(self, ext_id):
         print("[ManTAGU Extension] Initializing NVIDIA Inception Physical AI Layer...")
-        print("[ManTAGU Extension] UI window would open inside Omniverse Kit.")
-        self._window = {"title": "ManTAGU Shoe Telemetry Anchor"}
+        self._window = ui.Window("ManTAGU Shoe Telemetry Anchor", width=350, height=220)
+        with self._window.frame:
+            with ui.VStack(spacing=10):
+                ui.Label(
+                    "Odynex Axis Logistics - Haptic Ground-Truthing Dashboard",
+                    style={"color": 0xFF00BFFF, "font_size": 14},
+                )
+                ui.Spacer(height=5)
+                with ui.HStack():
+                    ui.Label("Active Node ID:")
+                    self.node_label = ui.Label(
+                        "ManTAGU-Vector-01", style={"font_weight": "bold"}
+                    )
+                with ui.HStack():
+                    ui.Label("Calculated Friction (μ):")
+                    self.friction_label = ui.Label("0.75 Dynamic Grip")
+                with ui.HStack():
+                    ui.Label("Subsurface Compliance:")
+                    self.compliance_label = ui.Label("2500 mN (Stable)")
+                ui.Spacer(height=10)
+                ui.Button(
+                    "Sync Stream with Foundation World Model",
+                    clicked_fn=self._on_sync_pressed,
+                )
 
-    def _on_sync_pressed(self) -> None:
+    def _on_sync_pressed(self):
         print(
             "[ManTAGU Extension] Streaming localized OpenUSD physics layers "
             "to NVIDIA Cosmos pipeline."
         )
 
-    def on_shutdown(self) -> None:
+    def on_shutdown(self):
         print("[ManTAGU Extension] Shutting down haptic data stream pipeline safely.")
         self._window = None
-
-
-# Optional real Kit base if present
-try:
-    import omni.ext  # type: ignore
-
-    class ManTAGUTelemetryExtensionKit(omni.ext.IExt, ManTAGUTelemetryExtension):  # type: ignore[misc]
-        def on_startup(self, ext_id):  # type: ignore[no-untyped-def]
-            ManTAGUTelemetryExtension.on_startup(self, ext_id)
-
-        def on_shutdown(self):  # type: ignore[no-untyped-def]
-            ManTAGUTelemetryExtension.on_shutdown(self)
-
-except ImportError:
-    pass

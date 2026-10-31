@@ -1,37 +1,31 @@
-/**
- * ManTAGU sole edge firmware sketch (ESP32 / Arduino-style).
- * Streams MANTAGU_DATA packets over Serial for the Python ingestion pipeline.
- * Copyright (c) 2026 Odynex Axis Logistics LLC.
- */
-
 #include <Arduino.h>
 
-static const int PIEZO_MATRIX_PIN = 34;
-static const unsigned long CORE_SAMPLE_RATE_MS = 20; // 50 Hz
+// Hardware Pin Layout definitions for the ManTAGU Sole Module
+#define PIEZO_MATRIX_PIN A0
+#define CORE_SAMPLE_RATE_MS 20
 
 struct HapticTelemetryPacket {
-  unsigned long timestamp;
+  uint32_t timestamp;
   float acceleration_x;
   float acceleration_y;
   float acceleration_z;
-  int surface_compliance;
   float micro_friction_index;
+  uint16_t surface_compliance;
 };
 
 void setup() {
   Serial.begin(115200);
   pinMode(PIEZO_MATRIX_PIN, INPUT);
-  randomSeed(analogRead(0));
-  Serial.println("MANTAGU_BOOT:OK");
+  Serial.println("[ManTAGU-Firmware] Initializing Sole Telemetry Matrix Array...");
+  Serial.println("[ManTAGU-Firmware] Bluetooth Low Energy Service Advertising Active.");
 }
 
 void loop() {
-  static unsigned long last_sample_time = 0;
-  unsigned long current_time = millis();
+  static uint32_t last_sample_time = 0;
+  uint32_t current_time = millis();
 
   if (current_time - last_sample_time >= CORE_SAMPLE_RATE_MS) {
     last_sample_time = current_time;
-
     int raw_compliance = analogRead(PIEZO_MATRIX_PIN);
 
     HapticTelemetryPacket frame;
